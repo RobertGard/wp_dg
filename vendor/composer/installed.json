@@ -6,12 +6,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Imangazaliev/DiDOM.git",
-            "reference": "c382b0fc8366fd467e7bcc4a45307159d21fe412"
+            "reference": "c2a8bd08679d2eec856782277267a48553322c7e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Imangazaliev/DiDOM/zipball/c382b0fc8366fd467e7bcc4a45307159d21fe412",
-            "reference": "c382b0fc8366fd467e7bcc4a45307159d21fe412",
+            "url": "https://api.github.com/repos/Imangazaliev/DiDOM/zipball/c2a8bd08679d2eec856782277267a48553322c7e",
+            "reference": "c2a8bd08679d2eec856782277267a48553322c7e",
             "shasum": ""
         },
         "require": {
@@ -22,7 +22,7 @@
         "require-dev": {
             "phpunit/phpunit": "^4.8"
         },
-        "time": "2020-03-13T19:56:18+00:00",
+        "time": "2020-05-12T21:04:30+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {

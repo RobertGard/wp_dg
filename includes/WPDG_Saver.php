@@ -21,7 +21,7 @@ class WPDG_Saver {
 		$php_input = self::jsonFromFileToArray('php://input');
 		$saver = new static();
 
-		foreach ($php_input["regions_list"] as $region) {
+		foreach ($php_input['regions_list'] as $region) {
 
 			// Выбираю первый массив
 			$region_data = current($region);
@@ -33,12 +33,12 @@ class WPDG_Saver {
 			$document->preserveWhiteSpace();
 			$document->loadHtmlFile($saver->code_file_path, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-			foreach ($region_data["items"] as $item) {
+			foreach ($region_data['items'] as $item) {
 				// Времено удаляю "html > body > "
-				$selector = str_replace("html > body > ", "", $item["selector"]);
+				$selector = str_replace('html > body > ', '', $item['selector']);
 				$found_item = $document->find($selector)[0];
 				$default_value = $found_item->text();
-				$found_item->setValue("&lt;?= get_field('{$item["name"]}'); ?&gt;");
+				$found_item->setValue("&lt;?= get_field('{$item['name']}'); ?&gt;");
 
 				$saver->addField($item, $default_value);
 			}
@@ -47,7 +47,7 @@ class WPDG_Saver {
 				file_put_contents($saver->code_file_path, htmlspecialchars_decode($document->format()->html(LIBXML_NOEMPTYTAG)));
 		}
 
-		wp_send_json("Ура!");
+		wp_send_json('Ура!');
 	}
 
 	/**
@@ -56,11 +56,11 @@ class WPDG_Saver {
 	 */
 	private function init(array $region_data) :void
 	{
-		$this->code_file_path = get_stylesheet_directory() . $region_data["path"];
+		$this->code_file_path = get_stylesheet_directory() . $region_data['path'];
 
-		$this->json_file_name = Utile::prepareFileName($region_data["path"]);
+		$this->json_file_name = Utile::prepareFileName($region_data['path']);
 
-		$this->json_folder_path = get_stylesheet_directory() . "/acf-json/";
+		$this->json_folder_path = get_stylesheet_directory() . '/acf-json/';
 
 		$this->json_file_path = $this->json_folder_path . $this->json_file_name .'.json';
 
@@ -76,10 +76,10 @@ class WPDG_Saver {
 		if (file_exists($this->json_file_path)) {
 			$this->group_data = self::jsonFromFileToArray($this->json_file_path);
 		} else {
-			$this->group_data = self::jsonFromFileToArray(WP_PLUGIN_DIR . '/wp-dg/json-templates/fields-group.json');
-			$this->group_data["key"] = $this->group_data["title"] = $this->json_file_name;
+			$this->group_data = self::jsonFromFileToArray(WP_PLUGIN_DIR . '/wp_dg/json-templates/fields-group.json');
+			$this->group_data['key'] = $this->group_data['title'] = $this->json_file_name;
 		}
-		$this->group_data["modified"] = time();
+		$this->group_data['modified'] = time();
 	}
 
 	/**
@@ -90,14 +90,14 @@ class WPDG_Saver {
 	 */
 	private function addField(array $item, string $default_value) :void
 	{
-		$path_json_tmp_field = WP_PLUGIN_DIR .'/wp-dg/json-templates/field-' . $item["type"] . '.json';
+		$path_json_tmp_field = WP_PLUGIN_DIR . "/wp_dg/json-templates/field-{$item['type']}.json";
 
 		if (file_exists($path_json_tmp_field)) {
 			$field_data = self::jsonFromFileToArray($path_json_tmp_field);
 
-			$field_data["key"] = $item["name"]. "_" . rand();
-			$field_data["name"] = $field_data["label"] = $item["name"];
-			$field_data["default_value"] = $default_value;
+			$field_data['key'] = $item['name'] . '_' . rand();
+			$field_data['name'] = $field_data['label'] = $item['name'];
+			$field_data['default_value'] = $default_value;
 
 			$this->group_data['fields'][] = $field_data;
 		}
@@ -110,7 +110,7 @@ class WPDG_Saver {
 	{
 		if (!is_dir($this->json_folder_path)) {
 			mkdir($this->json_folder_path, 0755, true);
-			file_put_contents($this->json_folder_path . "index.php", "<?php // Silence is golden.");
+			file_put_contents($this->json_folder_path . 'index.php', '<?php // Silence is golden.');
 		}
 	}
 

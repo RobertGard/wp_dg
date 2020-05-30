@@ -72,11 +72,11 @@ class WPDG_Highlight {
 	public function enqueueScriptsAndStyles() :void
 	{
 		// JS
-		wp_enqueue_script( 'wp-dg_picker', plugins_url('wp-dg/assets/js/dg-lib/element-picker.js'), [], $this->settings['version'], true);
-		wp_enqueue_script( 'wp-dg_wrapper-picker', plugins_url('wp-dg/assets/js/dg-lib/index.js'), ['wp-dg_picker'], $this->settings['version'], true);
+		wp_enqueue_script( 'wp_dg__picker', plugins_url('wp_dg/assets/js/dg-lib/element-picker.js'), [], $this->settings['version'], true);
+		wp_enqueue_script( 'wp_dg__wrapper-picker', plugins_url('wp_dg/assets/js/dg-lib/index.js'), ['wp_dg__picker'], $this->settings['version'], true);
 
 		// CSS
-		wp_enqueue_style('wp-dg_picker-css', plugins_url('wp-dg/assets/js/dg-lib/dg.css'), [], $this->settings['version']);
+		wp_enqueue_style('wp_dg__picker-css', plugins_url('wp_dg/assets/js/dg-lib/dg.css'), [], $this->settings['version']);
 	}
 
 	/**
@@ -135,7 +135,7 @@ class WPDG_Highlight {
 	 */
 	public function addModuleTypeForJS(string $tag, string $handle, string $src) :string
 	{
-		if ( "wp-dg_wrapper-picker" === $handle ) {
+		if ( 'wp_dg__wrapper-picker' === $handle ) {
 			$tag = '<script type="module" src="' . esc_url( $src ) . '"></script>';
 		}
 		return $tag;

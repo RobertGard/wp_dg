@@ -22,7 +22,7 @@ class WPDG_i18n {
 	public function loadPluginTextDomain() {
 
 		load_plugin_textdomain(
-			'wp-dg',
+			'wp_dg',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

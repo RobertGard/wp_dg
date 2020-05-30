@@ -4,11 +4,7 @@ namespace WP_DG\Admin;
 use WP_DG\Includes\Utile;
 
 /**
- * Специфичная для администратора функциональность плагина.
- *
- * Определяет имя подключаемого модуля, версию
- * и два примера хуков для постановки в очередь
- * специфичной для администратора таблицы стилей и JavaScript.
+ * Главная страница настроек в админке
  *
  * @package    WP_DG
  * @subpackage WP_DG/Admin
@@ -36,7 +32,7 @@ class WPDG_Admin
 			'Настройки WP DG',
 			'Настройки WP DG',
 			'manage_options',
-			'settings-wp-dg',
+			'settings-wp_dg',
 			array( __CLASS__, 'settingsPageWrapper' ),
 			'dashicons-admin-generic',
 			61
@@ -53,7 +49,7 @@ class WPDG_Admin
 				<form method=\"post\" enctype=\"multipart/form-data\" action=\"options.php\">";
 
 				settings_fields( 'settings_wp_dg' );
-				do_settings_sections( "settings-wp-dg" );
+				do_settings_sections( "settings-wp_dg" );
 				submit_button();
 
 		echo "	</form>
@@ -65,108 +61,101 @@ class WPDG_Admin
 	 */
 	public static function settingsPageContent() :void
 	{
-		$array_path_file = array_filter(list_files(TEMPLATEPATH), function ($path_file) {
-			return (stripos($path_file, ".php") !== false) ?? true;
+		// Заносим в $file_path_array список php файлов темы
+		$file_path_array = array_filter(list_files(TEMPLATEPATH), function ($file_path) {
+			return (stripos($file_path, '.php') !== false);
 		});
 
-		foreach ($array_path_file as $path_file) {
+		foreach ($file_path_array as $file_path) {
 
-			$file = str_replace(TEMPLATEPATH, '', $path_file);
-			$name_file = Utile::prepareFileName($file);
+			$file = str_replace(TEMPLATEPATH, '', $file_path);
+			$file_name = Utile::prepareFileName($file);
 
+			$fields_data_array = [
+				[
+					'name' => 'Открывающее событие',
+					'postfix' => '_opening_event',
+					'type' => 'text',
+					'desc'  => 'Введите открывающее событие.'
+				],
+				[
+					'name' => 'Закрывающее событие',
+					'postfix' => '_closing_event',
+					'type' => 'text',
+					'desc'  => 'Введите закрывающее событие.'
+				],
+				[
+					'name' => 'Файл шапки для этого шаблона',
+					'postfix' => '_header_file',
+					'type' => 'text',
+					'desc'  => 'Введите путь до файла шапки от корня темы.'
+				],
+				[
+					'name' => 'Файл футера для этого шаблона',
+					'postfix' => '_footer_file',
+					'type' => 'text',
+					'desc'  => 'Введите путь до файла футера от корня темы.'
+				],
+			];
 
 			add_settings_section(
-				$name_file.'_section',
+				$file_name.'_section',
 				$file,
 				'',
-				'settings-wp-dg'
+				'settings-wp_dg'
 			);
 
-			self::addingEventFields($name_file);
-
-			self::addingHeaderAndFooterFields($name_file);
+			// Регистрация и вывод полей
+			foreach ($fields_data_array as $field_data) {
+				self::addingFields($file_name, $field_data);
+			}
 		}
 	}
 
 	/**
-	 * Добавление полей событий
+	 * Регистрация полей
 	 *
-	 * @param string $name_file
+	 * @param string $file_name
+ 	 * @param string $field_data
 	 */
-	private static function addingEventFields(string $name_file) :void
+	private static function addingFields(string $file_name, array $field_data) :void
 	{
 		add_settings_field(
-			$name_file.'_opening_event',
-			'Открывающее событие',
+			$file_name . $field_data['postfix'],
+			$field_data['name'],
 			array( __CLASS__, 'displayFields' ),
-			'settings-wp-dg',
-			$name_file.'_section',
+			'settings-wp_dg',
+			$file_name.'_section',
 			[
-				'name' => $name_file.'_opening_event',
-				'type' => 'text',
-				'desc'  => 'Введите открывающее событие.',
+				'name' => $file_name . $field_data['postfix'],
+				'type' => $field_data['type'],
+				'desc'  => $field_data['desc']
 			]
 		);
 
-		add_settings_field(
-			$name_file.'_closing_event',
-			'Закрывающее событие',
-			array( __CLASS__, 'displayFields' ),
-			'settings-wp-dg',
-			$name_file.'_section',
-			[
-				'name' => $name_file.'_closing_event',
-				'type' => 'text',
-				'desc'  => 'Введите закрывающее событие.',
-			]
-		);
-
-		register_setting( 'settings_wp_dg', $name_file.'_opening_event' );
-		register_setting( 'settings_wp_dg', $name_file.'_closing_event' );
+		register_setting( 'settings_wp_dg', $file_name . $field_data['postfix'] );
 	}
 
 	/**
-	 * Добавление полей для header и footer
+	 * Вывод полей
 	 *
-	 * @param string $name_file
+	 * @param array $args
 	 */
-	private static function addingHeaderAndFooterFields(string $name_file) :void
+	public static function displayFields(array $args) :void
 	{
-		add_settings_field(
-			$name_file.'_header_file',
-			'Файл шапки для этого шаблона',
-			array( __CLASS__, 'displayFields' ),
-			'settings-wp-dg',
-			$name_file.'_section',
-			[
-				'name' => $name_file.'_header_file',
-				'type' => 'text',
-				'desc'  => 'Введите путь до файла шапки от корня темы.',
-			]
-		);
+		extract( $args );
+	  $value = get_option($name);
 
-		add_settings_field(
-			$name_file.'_footer_file',
-			'Файл футера для этого шаблона',
-			array( __CLASS__, 'displayFields' ),
-			'settings-wp-dg',
-			$name_file.'_section',
-			[
-				'name' => $name_file.'_footer_file',
-				'type' => 'text',
-				'desc'  => 'Введите путь до файла футера от корня темы.',
-			]
-		);
-
-		register_setting( 'settings_wp_dg', $name_file.'_header_file' );
-		register_setting( 'settings_wp_dg', $name_file.'_footer_file' );
-	}
-
-
-	public static function displayFields($args){
-		$value = get_option($args['name']);
-
-		echo "<input class='regular-text' type='text' id='{$args['name']}' name='{$args['name']}' value='{$value}' />";
+	  switch ( $type ) {
+			case 'text':
+				echo "<input class='regular-text' type='text' id='{$name}' name='{$name}' value='{$value}' />";
+			break;
+	    case 'textarea':
+	      echo "<textarea class='code large-text' rows='3' type='text' id='{$name}' name='{$name}'>{$value}</textarea>";
+	    break;
+	  }
+	  // Если есть описание поля, то вывести его
+	  echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
 	}
 
 }

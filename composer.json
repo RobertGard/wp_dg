@@ -1,5 +1,5 @@
 {
-    "name": "de-gard/wp-dg",
+    "name": "de-gard/wp_dg",
     "description": "Select the desired areas and make them editable.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0+",

@@ -73,10 +73,10 @@ class WPDG {
 
 		// Define settings.
 		$this->settings = array(
-			'name'						=> __('WP DG', 'wp-dg'),
+			'name'						=> __('WP DG', 'wp_dg'),
 			'slug'						=> WP_DG_SLUG,
 			'version'					=> WP_DG_VERSION,
-			'basename'					=> "WP_DG",
+			'basename'					=> 'WP_DG',
 			'path'						=> WP_DG_PATH,
 			'url'						=> plugins_url(WP_DG_SLUG),
 			'initial_actions_file'		=> WP_DG_PATH . '/initial-actions_array.php',
@@ -91,7 +91,7 @@ class WPDG {
 	 */
 	private function setRegime() :void
 	{
-		$regime = $_GET['wpdg_regime'] ?? "";
+		$regime = $_GET['wpdg_regime'] ?? '';
 
 		if ($regime === 'selection_regions' || $regime === 'editing_regions') {
 			$this->currentRegime = $regime;
@@ -122,7 +122,7 @@ class WPDG {
 		$this->setRegime();
 
 		// Если текущий пользователь администратор и включен режим выделения областей
-		if (current_user_can('manage_options') && $this->currentRegime === "selection_regions") {
+		if (current_user_can('manage_options') && $this->currentRegime === 'selection_regions') {
 
 			$highlight = new WPDG_Highlight( $this->getSettings() );
 			$highlight->setRegions();
