@@ -1,0 +1,23 @@
+{
+    "name": "de-gard/wp-dg",
+    "description": "Select the desired areas and make them editable.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "DE-GARD",
+            "email": "info@de-gard.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "imangazaliev/didom": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "WP_DG\\Includes\\": "includes",
+            "WP_DG\\Admin\\": "admin",
+            "WP_DG\\Front\\": "front"
+        }
+    }
+}

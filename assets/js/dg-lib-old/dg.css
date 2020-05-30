@@ -1,0 +1,39 @@
+.dg-highlight {
+  outline: 2px solid rgba(255, 219, 0);
+}
+
+.dg-menu {
+  position: fixed;
+  max-width: 300px;
+  width: 100%;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.75);
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border-radius: 4px;
+  display: none;
+}
+
+.dg-menu.active {
+  display: block;
+}
+
+.dg-menu ul {
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+}
+
+.dg-menu ul li {
+  padding: 10px 15px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.4s;
+}
+
+.dg-menu ul li:hover {
+  background-color: #000;
+  border-radius: 4px;
+}

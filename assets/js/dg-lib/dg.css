@@ -1,0 +1,131 @@
+.dg-highlight {
+  outline: 2px solid rgba(255, 219, 0);
+}
+
+.dg-menu {
+  position: fixed;
+  max-width: 300px;
+  width: 100%;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.75);
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border-radius: 4px;
+  display: none;
+}
+
+.dg-menu.active {
+  display: block;
+}
+
+.dg-menu ul {
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+}
+
+.dg-menu ul li {
+  padding: 10px 15px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.4s;
+}
+
+.dg-menu ul li:hover {
+  background-color: #000;
+  border-radius: 4px;
+}
+
+.modal-active {
+  overflow: hidden;
+}
+
+.dg-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  display: none;
+}
+
+.dg-modal.active {
+  display: flex;
+}
+
+.dg-modal-body {
+  max-width: 600px;
+  width: 100%;
+  max-height: 100vh;
+  margin-left: 30px;
+  margin-right: 30px;
+  padding: 20px;
+  background-color: #fff;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.dg-modal-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dg-modal-close {
+  position: absolute;
+  top: -60px;
+  right: -45px;
+  font-size: 60px;
+  line-height: 1;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.dg-modal-form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dg-modal-form-group label {
+  margin-bottom: 0;
+  margin-right: 10px;
+  font-size: 18px;
+  width: 20%;
+}
+
+.dg-modal-form-group input,
+.dg-modal-form-group select {
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.dg-modal-form-btn-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.dg-modal-form-btn-wrap button {
+  text-transform: uppercase;
+  border: none;
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.4s;
+}
+
+.dg-modal-form-btn-wrap button:hover {
+  background-color: #333;
+}
