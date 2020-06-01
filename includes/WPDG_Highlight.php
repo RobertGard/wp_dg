@@ -26,24 +26,57 @@ class WPDG_Highlight {
 	 */
 	public function setEventsAndFiles() :void
 	{
-		if(isset($GLOBALS['current_template']))
-		$this->eventsAndFiles = array_merge($this->eventsAndFiles, [
-			'header' => [
-				'path' => 'header.php',
-				'opening_event' => 'wp_body_open',
-				'closing_event' => 'wpdg_middle'
-			],
-			'middle' => [
-				'path' => $GLOBALS['current_template'],
-				'opening_event' => 'wpdg_middle',
-				'closing_event' => 'get_footer'
-			],
-			'footer' => [
-				'path' => 'footer.php',
-				'opening_event' => 'get_footer',
-				'closing_event' => 'wp_footer'
-			]
-		]);
+		$current_template = $GLOBALS['current_template'];
+
+		if (!empty($current_template)) {
+
+			$header_file = get_option(Utile::prepareFileName($current_template) . '_header_file');
+			$this->eventsAndFiles['header']['path'] = ($header_file !== false && !empty($header_file)) ? $header_file : '/header.php';
+
+			$this->setEvents(
+				'header',
+				$this->eventsAndFiles['header']['path'],
+				'wp_body_open',
+				'wpdg_middle'
+			);
+
+			$this->eventsAndFiles['middle']['path'] = '/' . trim($current_template, '/');
+
+			$this->setEvents(
+				'middle',
+				$this->eventsAndFiles['middle']['path'],
+				'wpdg_middle',
+				'get_footer'
+			);
+
+			$footer_file = get_option(Utile::prepareFileName($current_template) . '_footer_file');
+			$this->eventsAndFiles['footer']['path'] = ($footer_file !== false && !empty($footer_file)) ? $footer_file : '/footer.php';
+
+			$this->setEvents(
+				'footer',
+				$this->eventsAndFiles['footer']['path'],
+				'get_footer',
+				'wp_footer'
+			);
+		}
+	}
+
+	/**
+	 *  Задаём открывающее и закрывающее события
+	 *
+	 * @param string $file
+	 * @param string $default_opening_event
+	 * @param string $default_closing_event
+	 */
+	private function setEvents(string $key, string $file, string $default_opening_event, string $default_closing_event) :void
+	{
+		$prepared_file_name = Utile::prepareFileName($file);
+
+		$opening_event = get_option($prepared_file_name . '_opening_event');
+		$this->eventsAndFiles[$key]['opening_event'] = ($opening_event !== false && !empty($opening_event)) ? $opening_event : $default_opening_event;
+
+		$closing_event = get_option($prepared_file_name . '_closing_event');
+		$this->eventsAndFiles[$key]['closing_event'] = ($closing_event !== false && !empty($closing_event)) ? $closing_event : $default_closing_event;
 	}
 
 	/**

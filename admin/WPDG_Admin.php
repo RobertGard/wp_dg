@@ -96,6 +96,59 @@ class WPDG_Admin
 					'type' => 'text',
 					'desc'  => 'Введите путь до файла футера от корня темы.'
 				],
+				[
+					'name' => 'Отображать группу полей, если',
+					'postfix' => '_location_rule_param',
+					'type' => 'select',
+					'select_options' => [
+						[
+							'option_group' => 'Запись'
+						],
+						[
+							'option_value' => 'post_type',
+							'option_text' => 'Тип записи'
+						],
+						[
+							'option_value' => 'post_template',
+							'option_text' => 'Шаблон записи'
+						],
+						[
+							'option_value' => 'post',
+							'option_text' => 'Запись'
+						],
+						[
+							'option_group' => 'Страница'
+						],
+						[
+							'option_value' => 'page_type',
+							'option_text' => 'Тип страницы'
+						],
+						[
+							'option_value' => 'page_template',
+							'option_text' => 'Шаблон страницы'
+						],
+						[
+							'option_value' => 'page',
+							'option_text' => 'Страница'
+						]
+					],
+					'desc'  => 'Выберите при каких условия будут отображаться ваши поля.'
+				],
+				[
+					'name' => '',
+					'postfix' => '_location_rule_operator',
+					'type' => 'select',
+					'select_options' => [
+						[
+							'option_value' => '==',
+							'option_text' => 'равно'
+						],
+						[
+							'option_value' => '!=',
+							'option_text' => 'не равно'
+						]
+					]
+				],
 			];
 
 			add_settings_section(
@@ -116,21 +169,19 @@ class WPDG_Admin
 	 * Регистрация полей
 	 *
 	 * @param string $file_name
- 	 * @param string $field_data
+ 	 * @param array $field_data
 	 */
 	private static function addingFields(string $file_name, array $field_data) :void
 	{
+		$field_data['code'] = $file_name . $field_data['postfix'];
+
 		add_settings_field(
-			$file_name . $field_data['postfix'],
+			$field_data['code'],
 			$field_data['name'],
 			array( __CLASS__, 'displayFields' ),
 			'settings-wp_dg',
 			$file_name.'_section',
-			[
-				'name' => $file_name . $field_data['postfix'],
-				'type' => $field_data['type'],
-				'desc'  => $field_data['desc']
-			]
+			$field_data
 		);
 
 		register_setting( 'settings_wp_dg', $file_name . $field_data['postfix'] );
@@ -143,19 +194,54 @@ class WPDG_Admin
 	 */
 	public static function displayFields(array $args) :void
 	{
+		/**
+		 * @var string $name
+		 * @var string $code
+		 * @var string $type
+		 * @var string $desc
+		 * @var string $postfix
+		 * @var array $select_options
+		 */
 		extract( $args );
-	  $value = get_option($name);
+		$value = get_option($code);
 
-	  switch ( $type ) {
+		switch ( $type ) {
 			case 'text':
-				echo "<input class='regular-text' type='text' id='{$name}' name='{$name}' value='{$value}' />";
+				echo "<input class='regular-text' type='text' id='{$code}' name='{$code}' value='{$value}' />";
 			break;
-	    case 'textarea':
-	      echo "<textarea class='code large-text' rows='3' type='text' id='{$name}' name='{$name}'>{$value}</textarea>";
-	    break;
-	  }
-	  // Если есть описание поля, то вывести его
-	  echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
+			case 'textarea':
+			  echo "<textarea class='code large-text' rows='3' type='text' id='{$code}' name='{$code}'>{$value}</textarea>";
+			break;
+			case 'select':
+
+				echo "<select id=\"{$code}\" name=\"{$code}\">";
+				if (isset($select_options)) {
+					$option_group_closing = false;
+					foreach ( $select_options as $select_option ) {
+
+						// Открытие и закрытие <optgroup>
+						if ( isset( $select_option['option_group'] ) ) {
+							if ($option_group_closing) {
+								echo '</optgroup>';
+								$option_group_closing = false;
+							}
+							echo "<optgroup label=\"{$select_option['option_group']}\">";
+							$option_group_closing = true;
+						} else {
+							$selected = ($value === $select_option['option_value']) ? 'selected="selected"' : '';
+							echo "<option value=\"{$select_option['option_value']}\" {$selected}>
+										{$select_option['option_text']}
+								  </option>";
+						}
+					}
+					if ($option_group_closing) echo '</optgroup>';
+				}
+				echo '</select>';
+
+			break;
+		}
+		// Если есть описание поля, то вывести его
+		if (isset($desc) && $desc != '') echo "<br><span class='description'>$desc</span>";
 	}
 
 }
