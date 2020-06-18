@@ -2,14 +2,14 @@
 
 /**
  * @link              https://de-gard.ru
- * @since             1.0.0
+ * @since             1.1.0
  * @package           WP_DG
  *
  * @wordpress-plugin
  * Plugin Name:       WP DG
  * Plugin URI:        https://de-gard.ru
  * Description:       Select the desired areas and make them editable.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            DE-GARD
  * Author URI:        https://de-gard.ru
  * License:           GPL-2.0+
@@ -18,12 +18,12 @@
  * Domain Path:       /languages
  */
 
-	/**
-	 *  Added Сomposer autoload
-	 */
+	/** Added Сomposer autoload **/
 	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+	/**  Указываем зависимости от плагинов **/
 	require_once plugin_dir_path( __FILE__ ) . 'tgm-plugin-dependency.php';
-	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	/**  Список функций которые используются для вывода данных в тему **/
+	require_once plugin_dir_path( __FILE__ ) . 'theme-insertions.php';
 
 	// Если этот файл называется напрямую, отменить.
 	if ( ! defined( 'WPINC' ) ) {
@@ -47,7 +47,7 @@
 	} );
 
 	/*** Проверка, подключен ли Advanced Custom Fields ***/
-	if (is_plugin_active('advanced-custom-fields/acf.php')) {
+	if (in_array('advanced-custom-fields/acf.php', (array) get_option('active_plugins', array()))) {
 
 		/**
 		 *  Инициализация самого главного объекта

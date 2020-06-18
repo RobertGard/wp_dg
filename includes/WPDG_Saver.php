@@ -40,11 +40,9 @@ class WPDG_Saver {
 				// Времено удаляю "html > body > "
 				$selector = str_replace('html > body > ', '', $item['selector']);
 
-				$found_item = $document->find($selector)[0];
-				$default_value = $found_item->text();
-				$found_item->setValue("&lt;?= get_field('{$item['name']}'); ?&gt;");
+				$element = $document->find($selector)[0];
 
-				$saver->addField($item, $default_value);
+				$saver->addField($item, $element);
 			}
 
 			if(file_put_contents($saver->json_file_path, json_encode($saver->group_data))){
@@ -121,9 +119,9 @@ class WPDG_Saver {
 	 *  Добавление полей
 	 *
 	 * @param array $item
-	 * @param string $default_value
+	 * @param \DiDom\Element $element
 	 */
-	private function addField(array $item, string $default_value) :void
+	private function addField(array $item, \DiDom\Element &$element) :void
 	{
 		$path_json_tmp_field = WP_PLUGIN_DIR . "/wp_dg/json-templates/field-{$item['type']}.json";
 
@@ -132,7 +130,10 @@ class WPDG_Saver {
 
 			$field_data['key'] = $item['name'] . '_' . rand();
 			$field_data['name'] = $field_data['label'] = $item['name'];
-			$field_data['default_value'] = $default_value;
+
+			$field_data['default_value'] = $element->text();
+
+			$element->setValue("&lt;?= wpdg_get_field('{$field_data['key']}'); ?&gt;");
 
 			$this->group_data['fields'][] = $field_data;
 		}
@@ -155,7 +156,7 @@ class WPDG_Saver {
 	public static function acfAutoSync()
 	{
 		if (!is_plugin_active('advanced-custom-fields/acf.php')) return;
-		
+
 		$groups = acf_get_field_groups();
 		if (empty($groups)) {
 			return;

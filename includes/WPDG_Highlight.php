@@ -12,7 +12,7 @@ class WPDG_Highlight {
 	/**
 	 * В конструкторе задаём название плагина и версию
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 * @param string $settings The settings of this plugin.
 	 */
 	public function __construct( $settings )

@@ -16,7 +16,7 @@ class WPDG_Admin
 	/**
 	 * Инициализируйте класс и установите его свойства.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 */
 	public function __construct()
 	{
@@ -252,9 +252,9 @@ class WPDG_Admin
   public static function enqueueScriptsAndStyles() :void
   {
     // CSS
-    wp_enqueue_style('wp-dg-admin', plugins_url('wp_dg/admin/css/wp-dg-admin.css'), [], null, 'all');
+    wp_enqueue_style('wp_dg__admin-style', plugins_url('wp_dg/admin/css/wp_dg__admin-style.css'), [], null, 'all');
     // JS
-    wp_enqueue_script('wp-dg-admin', plugins_url('wp_dg/admin/js/wp-dg-admin.js'), [], null, true);
+    wp_enqueue_script('wp_dg__admin-script', plugins_url('wp_dg/admin/js/wp_dg__admin-script.js'), [], null, true);
   }
 
 

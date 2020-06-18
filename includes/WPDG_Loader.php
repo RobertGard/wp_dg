@@ -17,7 +17,7 @@ class WPDG_Loader {
 	/**
 	 * Массив действий, зарегистрированных в WordPress.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 * @access   protected
 	 * @var      array    $actions    The actions registered with WordPress to fire when the plugin loads.
 	 */
@@ -26,7 +26,7 @@ class WPDG_Loader {
 	/**
 	 * Массив фильтров, зарегистрированных в WordPress.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 * @access   protected
 	 * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
 	 */
@@ -35,7 +35,7 @@ class WPDG_Loader {
 	/**
 	 * Инициализируйте коллекции, используемые для поддержки действий и фильтров.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 *
 	 * @param array $settings
 	 */
@@ -103,7 +103,7 @@ class WPDG_Loader {
 	/**
 	 * Служебная функция, которая используется, чтобы регистрировать действия и крючки в одну коллекцию.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 * @access   private
 	 * @param    array  $hooks Коллекция Крючков, который был зарегистрирован (то есть, действия или фильтрами).
 	 * @param    string $hook Имя фильтра WordPress, который регистрируется.
@@ -129,7 +129,7 @@ class WPDG_Loader {
 	/**
 	 * Зарегистрировать фильтры и действия с WordPress.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 */
 	public function run()
 	{

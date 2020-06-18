@@ -9,11 +9,12 @@ use WP_DG\Admin\WPDG_Admin;
  * Определение класса, которое включает атрибуты и функции,
  * используемые как на общедоступной стороне сайта, так и в административной области.
  *
- * @since      1.0.0
+ * @since      1.1.0
  * @package    WP_DG
  * @subpackage WP_DG/Includes
  * @author     DE-GARD <info@de-gard.ru>
  */
+ 
 class WPDG {
 
 	private static $instances = null; // Объект приложения
@@ -29,7 +30,7 @@ class WPDG {
 	 * Загрузите зависимости, определите локаль и установите хуки
 	 * для административной области и общедоступной стороны сайта.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 */
 	protected function __construct()
 	{
@@ -69,7 +70,7 @@ class WPDG {
 		// Define constants.
 		$this->define( 'WP_DG_PATH', dirname(plugin_dir_path( __FILE__ ) ));
 		$this->define( 'WP_DG_SLUG', basename(WP_DG_PATH) );
-		$this->define( 'WP_DG_VERSION', '1.0.0' );
+		$this->define( 'WP_DG_VERSION', '1.1.0' );
 
 		// Define settings.
 		$this->settings = array(
@@ -103,7 +104,7 @@ class WPDG {
 	 *
 	 * Использует класс WPDG_i18n, чтобы установить домен и зарегистрировать хук в WordPress.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 * @access   private
 	 */
 	private function setLocale() :void
@@ -138,7 +139,7 @@ class WPDG {
 	/**
 	 * Ссылка на класс, который управляет хуками с плагином.
 	 *
-	 * @since     1.0.0
+	 * @since     1.1.0
 	 * @return    WPDG_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function getLoader() :WPDG_Loader
@@ -149,7 +150,7 @@ class WPDG {
 	/**
 	 * Получить номер версии плагина.
 	 *
-	 * @since     1.0.0
+	 * @since     1.1.0
 	 * @return    array    The settings number of the plugin.
 	 */
 	public function getSettings() :array
@@ -161,7 +162,7 @@ class WPDG {
 	 * Определяет константу, если она еще не существует.
 	 *
 	 * @date	25/4/20
-	 * @since	1.0.0
+	 * @since	1.1.0
 	 *
 	 * @param	string $name The constant name.
 	 * @param	mixed $value The constant value.
