@@ -7,7 +7,7 @@ namespace WP_DG\Includes;
 class WPDG_Highlight {
 
 	private $settings; // Все основные настройки
-	private $eventsAndFiles = []; // Массив всех файлов и событий, который оборачивают содержимое этих файлов
+	private $events_and_files = []; // Массив всех файлов и событий, который оборачивают содержимое этих файлов
 
 	/**
 	 * В конструкторе задаём название плагина и версию
@@ -22,6 +22,31 @@ class WPDG_Highlight {
 	}
 
 	/**
+	 * Получение дефолтнога массива events_and_files
+	 *
+	 * @return array
+	 */
+	private static function getDefaultArrayEventsAndFiles() :array
+	{
+		return [
+			'header' => [
+				'path' => '/header.php',
+				'opening_event' => 'wp_body_open',
+				'closing_event' => 'wpdg_middle'
+			],
+			'middle' => [
+				'opening_event' => 'wpdg_middle',
+				'closing_event' => 'get_footer'
+			],
+			'footer' => [
+				'path' => '/footer.php',
+				'opening_event' => 'get_footer',
+				'closing_event' => 'wp_footer'
+			]
+		];
+	}
+
+	/**
 	 * Задаются события и путь файла
 	 */
 	public function setEventsAndFiles() :void
@@ -30,71 +55,60 @@ class WPDG_Highlight {
 
 		if (!empty($current_template)) {
 
-			$header_file = get_option(Utile::prepareFileName($current_template) . '_header_file');
-			$this->eventsAndFiles['header']['path'] = ($header_file !== false && !empty($header_file)) ? $header_file : '/header.php';
+			// Задаём дефолный массив events_and_files
+			$this->events_and_files = self::getDefaultArrayEventsAndFiles();
 
-			$this->setEvents(
-				'header',
-				$this->eventsAndFiles['header']['path'],
-				'wp_body_open',
-				'wpdg_middle'
-			);
+			foreach ($this->events_and_files as $file_key => &$file_data) {
 
-			$this->eventsAndFiles['middle']['path'] = '/' . trim($current_template, '/');
+				// Получаем и задаём path файлов
+				if (isset($file_data['path'])) {
 
-			$this->setEvents(
-				'middle',
-				$this->eventsAndFiles['middle']['path'],
-				'wpdg_middle',
-				'get_footer'
-			);
+					Utile::getOptionAndOverrideItem(
+						$current_template,
+						$file_key . '_file',
+						$file_data['path']
+					);
 
-			$footer_file = get_option(Utile::prepareFileName($current_template) . '_footer_file');
-			$this->eventsAndFiles['footer']['path'] = ($footer_file !== false && !empty($footer_file)) ? $footer_file : '/footer.php';
+				} else {
+					$file_data['path'] = $current_template;
+				}
 
-			$this->setEvents(
-				'footer',
-				$this->eventsAndFiles['footer']['path'],
-				'get_footer',
-				'wp_footer'
-			);
+				// Задаём открывающее событие
+				Utile::getOptionAndOverrideItem(
+					$file_data['path'],
+					'opening_event',
+					$file_data['opening_event']
+				);
+
+				// Задаём закрывающее событие
+				Utile::getOptionAndOverrideItem(
+					$file_data['path'],
+					'closing_event',
+					$file_data['closing_event']
+				);
+
+			}
 		}
 	}
 
 	/**
-	 *  Задаём открывающее и закрывающее события
-	 *
-	 * @param string $file
-	 * @param string $default_opening_event
-	 * @param string $default_closing_event
-	 */
-	private function setEvents(string $key, string $file, string $default_opening_event, string $default_closing_event) :void
-	{
-		$prepared_file_name = Utile::prepareFileName($file);
-
-		$opening_event = get_option($prepared_file_name . '_opening_event');
-		$this->eventsAndFiles[$key]['opening_event'] = ($opening_event !== false && !empty($opening_event)) ? $opening_event : $default_opening_event;
-
-		$closing_event = get_option($prepared_file_name . '_closing_event');
-		$this->eventsAndFiles[$key]['closing_event'] = ($closing_event !== false && !empty($closing_event)) ? $closing_event : $default_closing_event;
-	}
-
-	/**
 	 * Размежевание области редактирования
-	 * Запуск всех событий заданных в $eventsAndFiles
+	 * Запуск всех событий заданных в $events_and_files
 	 */
 	public function setRegions() :void
 	{
-		foreach ((array) $this->eventsAndFiles as $fileData) {
+		foreach ((array) $this->events_and_files as $file_data) {
+
+			$file_path = '/' . trim($file_data['path'], '/');
 
 			// добавление открывающего комментария
-			add_action( $fileData['opening_event'], function () use ($fileData){
-				echo "\n <!-- path:{$fileData['path']} --> \n";
+			add_action( $file_data['opening_event'], function () use ($file_path){
+				echo "\n <!-- path:{$file_path} --> \n";
 			} );
 
 			// добавление закрывающего комментария
-			add_action( $fileData['closing_event'], function () use ($fileData){
-				echo "\n <!-- /path:{$fileData['path']} --> \n";
+			add_action( $file_data['closing_event'], function () use ($file_path){
+				echo "\n <!-- /path:{$file_path} --> \n";
 			} );
 		}
 	}
@@ -104,12 +118,12 @@ class WPDG_Highlight {
 	 */
 	public function enqueueScriptsAndStyles() :void
 	{
-		// JS
-		wp_enqueue_script( 'wp_dg__picker', plugins_url('wp_dg/assets/js/dg-lib/element-picker.js'), [], $this->settings['version'], true);
-		wp_enqueue_script( 'wp_dg__wrapper-picker', plugins_url('wp_dg/assets/js/dg-lib/index.js'), ['wp_dg__picker'], $this->settings['version'], true);
+    // JS
+    wp_enqueue_script( 'wp_dg__picker', plugins_url('wp_dg/assets/js/dg-lib/element-picker.js'), [], $this->settings['version'], true);
+    wp_enqueue_script( 'wp_dg__wrapper-picker', plugins_url('wp_dg/assets/js/dg-lib/index.js'), ['wp_dg__picker'], $this->settings['version'], true);
 
-		// CSS
-		wp_enqueue_style('wp_dg__picker-css', plugins_url('wp_dg/assets/js/dg-lib/dg.css'), [], $this->settings['version']);
+    // CSS
+    wp_enqueue_style('wp_dg__picker-css', plugins_url('wp_dg/assets/js/dg-lib/dg.css'), [], $this->settings['version']);
 	}
 
 	/**

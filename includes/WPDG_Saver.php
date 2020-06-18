@@ -18,7 +18,7 @@ class WPDG_Saver {
 	 */
 	public static function saveRegions()
 	{
-		$php_input = self::jsonFromFileToArray('php://input');
+		$php_input = Utile::jsonFromFileToArray('php://input');
 		$saver = new static();
 
 		foreach ($php_input['regions_list'] as $region) {
@@ -26,16 +26,20 @@ class WPDG_Saver {
 			// Выбираю первый массив
 			$region_data = current($region);
 
-			$saver->init($region_data);
+			$saver->init($region_data['path']);
 			$saver->setGroupData();
 
 			$document = new Document();
-			$document->preserveWhiteSpace();
-			$document->loadHtmlFile($saver->code_file_path, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+      $html = self::getCodeWithClosingTag($saver->code_file_path);
+
+			$document->loadHtml($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
 			foreach ($region_data['items'] as $item) {
+
 				// Времено удаляю "html > body > "
 				$selector = str_replace('html > body > ', '', $item['selector']);
+
 				$found_item = $document->find($selector)[0];
 				$default_value = $found_item->text();
 				$found_item->setValue("&lt;?= get_field('{$item['name']}'); ?&gt;");
@@ -43,22 +47,40 @@ class WPDG_Saver {
 				$saver->addField($item, $default_value);
 			}
 
-			if(file_put_contents($saver->json_file_path, json_encode($saver->group_data)))
-				file_put_contents($saver->code_file_path, htmlspecialchars_decode($document->format()->html(LIBXML_NOEMPTYTAG)));
+			if(file_put_contents($saver->json_file_path, json_encode($saver->group_data))){
+			  file_put_contents($saver->code_file_path, urldecode(htmlspecialchars_decode($document->html())));
+      }
 		}
 
 		wp_send_json('Ура!');
 	}
 
+  /**
+   * Проверка и добавления закрывающего тега PHP
+   * @param $file_path
+   * @return string
+   */
+	private static function getCodeWithClosingTag(string $file_path) :string
+  {
+    $html = file_get_contents($file_path);
+    $opening_tags = substr_count($html, '<?');
+    $closing_tags = substr_count($html, '?>');
+
+    if ($closing_tags < $opening_tags) {
+      $html .= '?>';
+    }
+    return $html;
+  }
+
 	/**
 	 * Инициализация свойств
-	 * @param array $region_data
+	 * @param string $region_path
 	 */
-	private function init(array $region_data) :void
+	private function init(string $region_path) :void
 	{
-		$this->code_file_path = get_stylesheet_directory() . $region_data['path'];
+		$this->code_file_path = get_stylesheet_directory() . $region_path;
 
-		$this->json_file_name = Utile::prepareFileName($region_data['path']);
+		$this->json_file_name = Utile::prepareFileName($region_path);
 
 		$this->json_folder_path = get_stylesheet_directory() . '/acf-json/';
 
@@ -74,12 +96,25 @@ class WPDG_Saver {
 	private function setGroupData() :void
 	{
 		if (file_exists($this->json_file_path)) {
-			$this->group_data = self::jsonFromFileToArray($this->json_file_path);
+			$this->group_data = Utile::jsonFromFileToArray($this->json_file_path);
 		} else {
-			$this->group_data = self::jsonFromFileToArray(WP_PLUGIN_DIR . '/wp_dg/json-templates/fields-group.json');
+			$this->group_data = Utile::jsonFromFileToArray(WP_PLUGIN_DIR . '/wp_dg/json-templates/fields-group.json');
 			$this->group_data['key'] = $this->group_data['title'] = $this->json_file_name;
+
+			$this->setLocation();
+
 		}
 		$this->group_data['modified'] = time();
+	}
+
+	/**
+	 * Задаём location
+	 */
+	private function setLocation() :void
+	{
+		Utile::getOptionAndOverrideItem($this->json_file_name, 'location_rule_param', $this->group_data['location'][0][0]['param']);
+		Utile::getOptionAndOverrideItem($this->json_file_name, 'location_rule_operator', $this->group_data['location'][0][0]['operator']);
+		Utile::getOptionAndOverrideItem($this->json_file_name, 'location_rule_value', $this->group_data['location'][0][0]['value']);
 	}
 
 	/**
@@ -93,7 +128,7 @@ class WPDG_Saver {
 		$path_json_tmp_field = WP_PLUGIN_DIR . "/wp_dg/json-templates/field-{$item['type']}.json";
 
 		if (file_exists($path_json_tmp_field)) {
-			$field_data = self::jsonFromFileToArray($path_json_tmp_field);
+			$field_data = Utile::jsonFromFileToArray($path_json_tmp_field);
 
 			$field_data['key'] = $item['name'] . '_' . rand();
 			$field_data['name'] = $field_data['label'] = $item['name'];
@@ -114,23 +149,13 @@ class WPDG_Saver {
 		}
 	}
 
-	/*
-	 * Полачить json из файла и декодировать в массив
-	 *
-	 * @param string $file_path
-	 *
-	 * @return array
-	 */
-	private static function jsonFromFileToArray( string $file_path) :array
-	{
-		return json_decode(file_get_contents($file_path), true);
-	}
-
 	/**
 	 *  Автоматическая синхронизация ACF
 	 */
 	public static function acfAutoSync()
 	{
+		if (!is_plugin_active('advanced-custom-fields/acf.php')) return;
+		
 		$groups = acf_get_field_groups();
 		if (empty($groups)) {
 			return;

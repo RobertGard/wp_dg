@@ -6,9 +6,9 @@
   "location": [
     [
       {
-        "param": "page",
+        "param": "page_template",
         "operator": "==",
-        "value": "26"
+        "value": "default"
       }
     ]
   ],

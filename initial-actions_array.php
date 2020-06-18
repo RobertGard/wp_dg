@@ -34,5 +34,12 @@ return [
 		'callback'      => 'settingsPageContent',
 		'priority'      => 10,
 		'accepted_args' => 1
-	]
+	],
+  [
+    'hook'          => 'admin_init',
+    'component'     => 'WP_DG\Admin\WPDG_Admin',
+    'callback'      => 'enqueueScriptsAndStyles',
+    'priority'      => 10,
+    'accepted_args' => 1
+  ]
 ];

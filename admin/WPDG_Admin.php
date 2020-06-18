@@ -149,6 +149,11 @@ class WPDG_Admin
 						]
 					]
 				],
+				[
+					'name' => 'Значение',
+					'postfix' => '_location_rule_value',
+					'type' => 'text'
+				]
 			];
 
 			add_settings_section(
@@ -213,12 +218,10 @@ class WPDG_Admin
 			  echo "<textarea class='code large-text' rows='3' type='text' id='{$code}' name='{$code}'>{$value}</textarea>";
 			break;
 			case 'select':
-
 				echo "<select id=\"{$code}\" name=\"{$code}\">";
 				if (isset($select_options)) {
 					$option_group_closing = false;
 					foreach ( $select_options as $select_option ) {
-
 						// Открытие и закрытие <optgroup>
 						if ( isset( $select_option['option_group'] ) ) {
 							if ($option_group_closing) {
@@ -237,11 +240,22 @@ class WPDG_Admin
 					if ($option_group_closing) echo '</optgroup>';
 				}
 				echo '</select>';
-
 			break;
 		}
 		// Если есть описание поля, то вывести его
 		if (isset($desc) && $desc != '') echo "<br><span class='description'>$desc</span>";
 	}
+
+  /**
+   * Подключение стилей и скритов js
+   */
+  public static function enqueueScriptsAndStyles() :void
+  {
+    // CSS
+    wp_enqueue_style('wp-dg-admin', plugins_url('wp_dg/admin/css/wp-dg-admin.css'), [], null, 'all');
+    // JS
+    wp_enqueue_script('wp-dg-admin', plugins_url('wp_dg/admin/js/wp-dg-admin.js'), [], null, true);
+  }
+
 
 }

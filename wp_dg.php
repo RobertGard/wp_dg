@@ -21,8 +21,9 @@
 	/**
 	 *  Added Сomposer autoload
 	 */
-	require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-
+	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+	require_once plugin_dir_path( __FILE__ ) . 'tgm-plugin-dependency.php';
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 	// Если этот файл называется напрямую, отменить.
 	if ( ! defined( 'WPINC' ) ) {
@@ -45,19 +46,24 @@
 		WP_DG\Includes\WPDG_Deactivator::deactivate();
 	} );
 
-	/**
-	 *  Инициализация самого главного объекта
-	 */
-	$wp_dg = WP_DG\Includes\WPDG::getInstance();
+	/*** Проверка, подключен ли Advanced Custom Fields ***/
+	if (is_plugin_active('advanced-custom-fields/acf.php')) {
 
-	/**
-	 * Замена/обёртка функции get_header()
-	 *
-	 * @param string $currentFile - текущий файл, в котором вызывается функция
-	 * @param array $eventsAndFiles - Файлы и события, в к оторых они вызываются
-	 */
-	add_action('wp_head', function () use ($wp_dg) {
+		/**
+		 *  Инициализация самого главного объекта
+		 */
+		$wp_dg = WP_DG\Includes\WPDG::getInstance();
 
-		$wp_dg->run();
+		/**
+		 * Замена/обёртка функции get_header()
+		 *
+		 * @param string $currentFile - текущий файл, в котором вызывается функция
+		 * @param array $eventsAndFiles - Файлы и события, в к оторых они вызываются
+		 */
+		add_action('wp_head', function () use ($wp_dg) {
 
-	});
+			$wp_dg->run();
+
+		});
+
+	}
