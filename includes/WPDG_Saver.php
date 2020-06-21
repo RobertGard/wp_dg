@@ -126,16 +126,66 @@ class WPDG_Saver {
 		$path_json_tmp_field = WP_PLUGIN_DIR . "/wp_dg/json-templates/field-{$item['type']}.json";
 
 		if (file_exists($path_json_tmp_field)) {
+
 			$field_data = Utile::jsonFromFileToArray($path_json_tmp_field);
 
 			$field_data['key'] = $item['name'] . '_' . rand();
 			$field_data['name'] = $field_data['label'] = $item['name'];
 
-			$field_data['default_value'] = $element->text();
+			$field_data['default_value'] = self::getDefaultValue($field_data['type'], $item['default_value'], $element);
 
-			$element->setValue("&lt;?= wpdg_get_field('{$field_data['key']}'); ?&gt;");
+			self::setInsertions($field_data['type'], $field_data['key'], $element);
 
 			$this->group_data['fields'][] = $field_data;
+		}
+	}
+
+	/**
+	 * Возвращаем дефолтное значение
+	 *
+	 * @param string $field_type
+ 	 * @param string $default_value
+	 * @param \DiDom\Element $element
+	 */
+	private static function getDefaultValue(string $field_type, string $default_value, \DiDom\Element $element)
+	{
+		if(!empty($default_value)) return $default_value;
+
+		switch ($field_type) {
+
+				case 'text':
+						$default_value = $element->text();
+						break;
+
+				case 'textarea':
+				case 'wysiwyg':
+						$default_value = $element->innerHtml();
+						break;
+		}
+
+		return $default_value;
+	}
+
+	/**
+	 * Вставляем функцию вывода в шаблон
+	 *
+	 * @param string $field_type
+ 	 * @param string $field_key
+	 * @param \DiDom\Element $element
+	 */
+	private static function setInsertions(string $field_type, string $field_key, \DiDom\Element &$element) :void
+	{
+		switch ($field_type) {
+
+				case 'text':
+				case 'textarea':
+				case 'wysiwyg':
+						$element->setValue("<?= wpdg_get_field('{$field_key}'); ?>");
+						break;
+
+				case 'image':
+						$element->setAttribute('src', "<?= wpdg_get_field('{$field_key}'); ?>");
+						break;
 		}
 	}
 
@@ -155,8 +205,6 @@ class WPDG_Saver {
 	 */
 	public static function acfAutoSync()
 	{
-		if (!is_plugin_active('advanced-custom-fields/acf.php')) return;
-
 		$groups = acf_get_field_groups();
 		if (empty($groups)) {
 			return;
@@ -191,6 +239,17 @@ class WPDG_Saver {
 			// import
 			$field_group = acf_import_field_group($group);
 		}
+	}
+
+
+	public static function addDefaultValueImageField($field) :void
+	{
+		acf_render_field_setting( $field, array(
+			'label'			=> 'Default Image',
+			'instructions'		=> 'Если изображение не задано, то будет выводиться дефолтное.',
+			'type'			=> 'image',
+			'name'			=> 'default_value',
+		));
 	}
 
 }

@@ -160,7 +160,10 @@ class WPDG_Highlight {
 			          <div class=\"dg-modal-form-group\">
 			            <label for=\"region-type\">Тип</label>
 			            <select name=\"type\" id=\"region-type\">
-			              <option value=\"text\">text</option>
+			              <option value=\"text\">Текст</option>
+										<option value=\"image\">Изображение</option>
+										<option value=\"textarea\">Область текста</option>
+										<option value=\"wysiwyg\">Редактор WYSIWYG</option>
 			            </select>
 			          </div>
 			          <div class=\"dg-modal-form-btn-wrap\">

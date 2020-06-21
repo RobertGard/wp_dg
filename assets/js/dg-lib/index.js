@@ -37,6 +37,11 @@ window.onload = () => {
 
   document.body.addEventListener('click', (e) => {
     const target = e.target;
+    var default_value = '';
+
+    if (target.tagName === 'IMG') {
+      default_value = target.getAttribute('src');
+    }
 
     if (
       target.classList.contains(customMenu.className) ||
@@ -54,7 +59,7 @@ window.onload = () => {
     if (domData) {
       const [region, dgPath, selector] = domData;
 
-      regionEditor.addElement(region, dgPath, selector);
+      regionEditor.addElement(region, dgPath, selector, default_value);
 
       const highlightedElementIndex = highlighter.findElementIndex(
         highlightedElement

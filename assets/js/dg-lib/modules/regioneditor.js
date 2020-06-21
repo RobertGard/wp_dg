@@ -13,19 +13,19 @@ class RegionEditor {
     return this._elements;
   }
 
-  addElement(region, path, selector) {
+  addElement(region, path, selector, default_value) {
     const regionIndex = this._elements.findIndex((el) =>
       el.hasOwnProperty(region)
     );
 
     if (regionIndex !== -1) {
-      this.addElementToExistsRegion(regionIndex, region, selector);
+      this.addElementToExistsRegion(regionIndex, region, selector, default_value);
     } else {
-      this.addNewRegion(region, path, selector);
+      this.addNewRegion(region, path, selector, default_value);
     }
   }
 
-  addNewRegion(region, path, selector) {
+  addNewRegion(region, path, selector, default_value) {
     this._elements.push({
       [region]: {
         path,
@@ -33,14 +33,15 @@ class RegionEditor {
           {
             selector,
             type: 'text',
-            name: `Name${Date.now()}`
+            name: `Name${Date.now()}`,
+            default_value: default_value,
           }
         ]
       }
     });
   }
 
-  addElementToExistsRegion(regionIndex, region, selector) {
+  addElementToExistsRegion(regionIndex, region, selector, default_value) {
     const items = this._elements[regionIndex][region].items;
     const isSelectorExists = items.some((item) => item.selector === selector);
 
@@ -56,7 +57,8 @@ class RegionEditor {
       items.push({
         selector,
         type: 'text',
-        name: `Name${Date.now()}`
+        name: `Name${Date.now()}`,
+        default_value: default_value
       });
     }
 
@@ -98,7 +100,7 @@ class RegionEditor {
     const itemToEdit = regionToEdit.items.find(
       (item) => item.selector === selector
     );
-    
+
     itemToEdit.type = type;
     itemToEdit.name = name;
   }
