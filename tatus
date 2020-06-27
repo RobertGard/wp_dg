@@ -1,0 +1,41 @@
+[33mcommit f57da0d2dc6586f1cc6e2d815776021da6198d31[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Mon Jun 22 01:50:53 2020 +0300
+
+    Added new insert types.
+
+[33mcommit afe190e35f5301a8497c5a24854bb03f845479b9[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Fri Jun 19 00:48:48 2020 +0300
+
+    Getting and outputting the default value if the ACF field value is not set.
+
+[33mcommit d07e0f23e77fc33a57a59f2e72d9b85be3e303a1[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Thu Jun 18 21:43:35 2020 +0300
+
+    We fixed the error saving the file. Added acf plugin activity tracking.
+
+[33mcommit 72db4ad2ebf31efa35cfb24a0e0b1db920279666[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Mon Jun 1 03:14:57 2020 +0300
+
+    Подтянул настройки при распределении регионов. (Доработка страницы настроек в админке)
+
+[33mcommit 73b544910307416578a421dc37f55b27aea6f86b[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Sat May 30 21:55:26 2020 +0300
+
+    Переименовал главный файл плагина
+
+[33mcommit 813aaeed702419e5bc8536210a643da100f02a12[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Sat May 30 21:52:11 2020 +0300
+
+    Доработал код настроек плагина в админке
+
+[33mcommit 53b45e6e03328703bd704f8dab480e0a2fe7f9b4[m
+Author: RobertGard <robert.gard@mail.ru>
+Date:   Sat May 30 12:30:58 2020 +0300
+
+    First commit. The foundation is laid.

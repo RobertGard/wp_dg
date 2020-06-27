@@ -1,0 +1,53 @@
+{
+  "description": "Redux is a simple, truly extensible options framework for WordPress themes and plugins.",
+  "main": "gulpfile.js",
+  "name": "Redux-Framework",
+  "author": "Team Redux",
+  "version": "4.0.3",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reduxframework/redux-framework-4.git"
+  },
+  "bugs": {
+    "url": "https://github.com/reduxframework/redux-framework-4/issues"
+  },
+  "homepage": "http://redux.io",
+  "resolutions": {
+    "lodash": "4.17.5"
+  },
+  "dependencies": {
+    "browser-sync": "^2.26.7",
+    "gifsicle": "^4.0.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-filter": "^6.0.0",
+    "gulp-imagemin": "^6.0.0",
+    "gulp-jscs": "^4.1.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-line-ending-corrector": "^1.0.3",
+    "gulp-merge-media-queries": "^0.2.1",
+    "gulp-notify": "^3.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sass-packager": "^0.0.5",
+    "gulp-sort": "^2.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "gulp-uglifycss": "^1.1.0",
+    "gulp-wp-pot": "^2.3.5",
+    "imagemin-gifsicle": "^6.0.1",
+    "jscs": "^3.0.7",
+    "jshint": "^2.10.2",
+    "lodash": "^4.17.15",
+    "merge-stream": "^2.0.0",
+    "node-sass": "^4.12.0",
+    "npm-force-resolutions": "^0.0.2",
+    "optipng-bin": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=0.10.33",
+    "npm": ">=1.4.0"
+  }
+}

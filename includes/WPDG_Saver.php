@@ -76,13 +76,17 @@ class WPDG_Saver {
 	 */
 	private function init(string $region_path) :void
 	{
+		// Путь к файлу/региону темы
 		$this->code_file_path = get_stylesheet_directory() . $region_path;
 
+		// Имя файла json
 		$this->json_file_name = Utile::prepareFileName($region_path);
 
+		// Путь к папке json
 		$this->json_folder_path = get_stylesheet_directory() . '/acf-json/';
 
-		$this->json_file_path = $this->json_folder_path . $this->json_file_name .'.json';
+		// Полный путь до файла json
+		$this->json_file_path = $this->json_folder_path . 'group_' . $this->json_file_name .'.json';
 
 		$this->createJsonFolder();
 	}
@@ -97,7 +101,8 @@ class WPDG_Saver {
 			$this->group_data = Utile::jsonFromFileToArray($this->json_file_path);
 		} else {
 			$this->group_data = Utile::jsonFromFileToArray(WP_PLUGIN_DIR . '/wp_dg/json-templates/fields-group.json');
-			$this->group_data['key'] = $this->group_data['title'] = $this->json_file_name;
+			$this->group_data['key'] = 'group_' . $this->json_file_name;
+			$this->group_data['title'] = $this->json_file_name;
 
 			$this->setLocation();
 
@@ -239,17 +244,6 @@ class WPDG_Saver {
 			// import
 			$field_group = acf_import_field_group($group);
 		}
-	}
-
-
-	public static function addDefaultValueImageField($field) :void
-	{
-		acf_render_field_setting( $field, array(
-			'label'			=> 'Default Image',
-			'instructions'		=> 'Если изображение не задано, то будет выводиться дефолтное.',
-			'type'			=> 'image',
-			'name'			=> 'default_value',
-		));
 	}
 
 }

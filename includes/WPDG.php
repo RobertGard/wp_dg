@@ -14,7 +14,7 @@ use WP_DG\Admin\WPDG_Admin;
  * @subpackage WP_DG/Includes
  * @author     DE-GARD <info@de-gard.ru>
  */
- 
+
 class WPDG {
 
 	private static $instances = null; // Объект приложения
@@ -68,7 +68,7 @@ class WPDG {
 	private function setSettings() :void
 	{
 		// Define constants.
-		$this->define( 'WP_DG_PATH', dirname(plugin_dir_path( __FILE__ ) ));
+		$this->define( 'WP_DG_PATH', dirname(plugin_dir_path( __FILE__ )));
 		$this->define( 'WP_DG_SLUG', basename(WP_DG_PATH) );
 		$this->define( 'WP_DG_VERSION', '1.1.0' );
 

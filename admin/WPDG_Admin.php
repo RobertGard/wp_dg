@@ -12,250 +12,196 @@ use WP_DG\Includes\Utile;
  */
 class WPDG_Admin
 {
+  private $opt_name;
 
 	/**
 	 * Инициализируйте класс и установите его свойства.
 	 *
 	 * @since    1.1.0
 	 */
-	public function __construct()
-	{
-
-	}
+	public function __construct() {
+    $this->opt_name = 'wp_dg_option';
+  }
 
 	/**
 	 * Добавление страницы настроек
 	 */
 	public static function addSettingsPage() :void
 	{
-		add_menu_page(
-			'Настройки WP DG',
-			'Настройки WP DG',
-			'manage_options',
-			'settings-wp_dg',
-			array( __CLASS__, 'settingsPageWrapper' ),
-			'dashicons-admin-generic',
-			61
-		);
+    $redux_path = dirname(plugin_dir_path( __FILE__ )) . '/vendor/redux-framework-4';
+
+    if (!class_exists('ReduxFramework') && file_exists($redux_path . '/redux-core/framework.php')) {
+        require_once $redux_path . '/redux-core/framework.php';
+    }
+    //require_once 'redux-framework-config.php';
+
+    $admin = new static();
+    $admin->setArgumentsSettingsPage();
+    $admin->setHelpTab();
+    $admin->setSectionMainSettings();
+
 	}
 
-	/**
-	 * Обёртка для контента настроек
-	 */
-	public static function settingsPageWrapper() :void
-	{
-		echo "<div class=\"wrap\">
-				<h2>Настройки плагина WP DG</h2>
-				<form method=\"post\" enctype=\"multipart/form-data\" action=\"options.php\">";
+  private function setArgumentsSettingsPage()
+  {
+    \Redux::set_args($this->opt_name, [
+      'opt_name'                  => $this->opt_name,
+    	'display_name'              => 'WP DG',
+    	'display_version'           => '1.1.0',
+    	'menu_type'                 => 'menu',
+    	'allow_sub_menu'            => true,
+    	'menu_title'                => esc_html__( 'Настройки WP DG', 'wp_dg' ),
+    	'page_title'                => esc_html__( 'Настройки WP DG', 'wp_dg' ),
+    	'async_typography'          => true,
+    	'disable_google_fonts_link' => false,
+    	'admin_bar'                 => true,
+    	'admin_bar_icon'            => 'dashicons-portfolio',
+    	'admin_bar_priority'        => 50,
+    	'global_variable'           => '',
+    	'dev_mode'                  => true,
+    	'customizer'                => true,
+    	'page_priority'             => null,
+    	'page_parent'               => 'themes.php',
+    	'page_permissions'          => 'manage_options',
+    	'menu_icon'                 => '',
+    	'last_tab'                  => '',
+    	'page_icon'                 => 'icon-themes',
+    	'page_slug'                 => 'wp_dg_options',
+    	'save_defaults'             => true,
+    	'default_show'              => false,
+    	'default_mark'              => '',
+    	'show_import_export'        => false,
+    	'transient_time'            => 60 * MINUTE_IN_SECONDS,
+    	'output'                    => true,
+    	'output_tag'                => true,
+    	'database'                  => '',
+    	'use_cdn'                   => true,
+    	'compiler'                  => true,
+      'admin_bar_links'           => [
+        [
+          'id'    => 'wp_dg-docs',
+        	'href'  => '//de-gard.ru/',
+        	'title' => esc_html__( 'Документация', 'wp_dg' ),
+        ],
+        [
+          'id'    => 'wp_dg-support',
+          'href'  => '//de-gard.ru/',
+          'title' => esc_html__( 'Помощь', 'wp_dg' ),
+        ]
+      ],
+      'share_icons'               => [
+        [
+          'url'   => 'https://vk.com/de_gard',
+          'title' => esc_html__( 'VKontakte', 'wp_dg' ),
+          'icon'  => 'el el-vkontakte',
+        ]
+      ],
+    	'hints'                     => [
+    		'icon'          => 'el el-question-sign',
+    		'icon_position' => 'right',
+    		'icon_color'    => 'lightgray',
+    		'icon_size'     => 'normal',
+    		'tip_style'     => [
+    			'color'   => 'light',
+    			'shadow'  => true,
+    			'rounded' => false,
+    			'style'   => '',
+    		],
+    		'tip_position'  => [
+    			'my' => 'top left',
+    			'at' => 'bottom right',
+    		],
+    		'tip_effect'    => [
+    			'show' => [
+    				'effect'   => 'slide',
+    				'duration' => '500',
+    				'event'    => 'mouseover',
+    			],
+    			'hide' => [
+    				'effect'   => 'slide',
+    				'duration' => '500',
+    				'event'    => 'click mouseleave',
+    			],
+    		],
+    	],
+    ]);
+  }
 
-				settings_fields( 'settings_wp_dg' );
-				do_settings_sections( "settings-wp_dg" );
-				submit_button();
+  private function setHelpTab()
+  {
+    \Redux::set_help_tab($this->opt_name, [
+      [
+        'id'      => 'redux-help-tab-1',
+        'title'   => esc_html__('Вот тут первый вопрос!', 'wp_dg'),
+        'content' => '<p>' . esc_html__('Вот тут ответ на первый вопрос!', 'wp_dg') . '</p>',
+      ],
+      [
+        'id'      => 'redux-help-tab-2',
+        'title'   => esc_html__('Вот тут второй вопрос!', 'wp_dg'),
+        'content' => '<p>' . esc_html__('Вот тут ответ на второй вопрос!', 'wp_dg') . '</p>',
+      ]
+    ]);
+  }
 
-		echo "	</form>
-			  </div>";
-	}
+  private function setSectionMainSettings()
+  {
+    \Redux::set_section($this->opt_name, [
+      'title'  => esc_html__('Главные настройки', 'wp_dg'),
+      'id'     => 'main_settings',
+      'desc'   => esc_html__('Тут задаются главне настройки.', 'wp_dg'),
+      'icon'   => 'el el-home',
+      'fields' => $this->getFields(),
+    ]);
+  }
 
-	/**
-	 * Контент настроек
-	 */
-	public static function settingsPageContent() :void
-	{
-		// Заносим в $file_path_array список php файлов темы
-		$file_path_array = array_filter(list_files(TEMPLATEPATH), function ($file_path) {
-			return (stripos($file_path, '.php') !== false);
-		});
+  private function getFields()
+  {
+    $group_fields = [];
+
+    // Заносим в $file_path_array список php файлов темы
+    $file_path_array = glob(TEMPLATEPATH . '/*.php');
 
 		foreach ($file_path_array as $file_path) {
 
 			$file = str_replace(TEMPLATEPATH, '', $file_path);
 			$file_name = Utile::prepareFileName($file);
 
-			$fields_data_array = [
-				[
-					'name' => 'Открывающее событие',
-					'postfix' => '_opening_event',
-					'type' => 'text',
-					'desc'  => 'Введите открывающее событие.'
-				],
-				[
-					'name' => 'Закрывающее событие',
-					'postfix' => '_closing_event',
-					'type' => 'text',
-					'desc'  => 'Введите закрывающее событие.'
-				],
-				[
-					'name' => 'Файл шапки для этого шаблона',
-					'postfix' => '_header_file',
-					'type' => 'text',
-					'desc'  => 'Введите путь до файла шапки от корня темы.'
-				],
-				[
-					'name' => 'Файл футера для этого шаблона',
-					'postfix' => '_footer_file',
-					'type' => 'text',
-					'desc'  => 'Введите путь до файла футера от корня темы.'
-				],
-				[
-					'name' => 'Отображать группу полей, если',
-					'postfix' => '_location_rule_param',
-					'type' => 'select',
-					'select_options' => [
-						[
-							'option_group' => 'Запись'
-						],
-						[
-							'option_value' => 'post_type',
-							'option_text' => 'Тип записи'
-						],
-						[
-							'option_value' => 'post_template',
-							'option_text' => 'Шаблон записи'
-						],
-						[
-							'option_value' => 'post',
-							'option_text' => 'Запись'
-						],
-						[
-							'option_group' => 'Страница'
-						],
-						[
-							'option_value' => 'page_type',
-							'option_text' => 'Тип страницы'
-						],
-						[
-							'option_value' => 'page_template',
-							'option_text' => 'Шаблон страницы'
-						],
-						[
-							'option_value' => 'page',
-							'option_text' => 'Страница'
-						]
-					],
-					'desc'  => 'Выберите при каких условия будут отображаться ваши поля.'
-				],
-				[
-					'name' => '',
-					'postfix' => '_location_rule_operator',
-					'type' => 'select',
-					'select_options' => [
-						[
-							'option_value' => '==',
-							'option_text' => 'равно'
-						],
-						[
-							'option_value' => '!=',
-							'option_text' => 'не равно'
-						]
-					]
-				],
-				[
-					'name' => 'Значение',
-					'postfix' => '_location_rule_value',
-					'type' => 'text'
-				]
-			];
-
-			add_settings_section(
-				$file_name.'_section',
-				$file,
-				'',
-				'settings-wp_dg'
-			);
-
-			// Регистрация и вывод полей
-			foreach ($fields_data_array as $field_data) {
-				self::addingFields($file_name, $field_data);
-			}
+      $group_fields = array_merge($group_fields, [
+        [
+          'id'      => $file_name . '_info',
+          'type'    => 'info',
+          'title'   => __($file , 'wp_dg'),
+          'desc'    => __('Все настройки ниже относятся к этому файлу.' , 'wp_dg'),
+          'style'   => 'info'
+        ],
+        [
+          'id'       => $file_name . '_opening_event',
+          'type'     => 'text',
+          'title'    => esc_html__( 'Открывающее событие', 'wp_dg' ),
+          'desc'     => esc_html__( 'Введите открывающее событие.', 'wp_dg' ),
+        ],
+        [
+          'id'       => $file_name . '_closing_event',
+          'type'     => 'text',
+          'title'    => esc_html__( 'Закрывающее событие', 'wp_dg' ),
+          'desc'     => esc_html__( 'Введите закрывающее событие.', 'wp_dg' ),
+        ],
+        [
+          'id'       => $file_name . '_header_file',
+          'type'     => 'text',
+          'title'    => esc_html__( 'Файл шапки для этого шаблона', 'wp_dg' ),
+          'desc'     => esc_html__( 'Введите путь до файла шапки от корня темы.', 'wp_dg' ),
+        ],
+        [
+          'id'       => $file_name . '_footer_file',
+          'type'     => 'text',
+          'title'    => esc_html__( 'Файл футера для этого шаблона', 'wp_dg' ),
+          'desc'     => esc_html__( 'Введите путь до файла футера от корня темы.', 'wp_dg' ),
+        ],
+      ]);
 		}
-	}
 
-	/**
-	 * Регистрация полей
-	 *
-	 * @param string $file_name
- 	 * @param array $field_data
-	 */
-	private static function addingFields(string $file_name, array $field_data) :void
-	{
-		$field_data['code'] = $file_name . $field_data['postfix'];
-
-		add_settings_field(
-			$field_data['code'],
-			$field_data['name'],
-			array( __CLASS__, 'displayFields' ),
-			'settings-wp_dg',
-			$file_name.'_section',
-			$field_data
-		);
-
-		register_setting( 'settings_wp_dg', $file_name . $field_data['postfix'] );
-	}
-
-	/**
-	 * Вывод полей
-	 *
-	 * @param array $args
-	 */
-	public static function displayFields(array $args) :void
-	{
-		/**
-		 * @var string $name
-		 * @var string $code
-		 * @var string $type
-		 * @var string $desc
-		 * @var string $postfix
-		 * @var array $select_options
-		 */
-		extract( $args );
-		$value = get_option($code);
-
-		switch ( $type ) {
-			case 'text':
-				echo "<input class='regular-text' type='text' id='{$code}' name='{$code}' value='{$value}' />";
-			break;
-			case 'textarea':
-			  echo "<textarea class='code large-text' rows='3' type='text' id='{$code}' name='{$code}'>{$value}</textarea>";
-			break;
-			case 'select':
-				echo "<select id=\"{$code}\" name=\"{$code}\">";
-				if (isset($select_options)) {
-					$option_group_closing = false;
-					foreach ( $select_options as $select_option ) {
-						// Открытие и закрытие <optgroup>
-						if ( isset( $select_option['option_group'] ) ) {
-							if ($option_group_closing) {
-								echo '</optgroup>';
-								$option_group_closing = false;
-							}
-							echo "<optgroup label=\"{$select_option['option_group']}\">";
-							$option_group_closing = true;
-						} else {
-							$selected = ($value === $select_option['option_value']) ? 'selected="selected"' : '';
-							echo "<option value=\"{$select_option['option_value']}\" {$selected}>
-										{$select_option['option_text']}
-								  </option>";
-						}
-					}
-					if ($option_group_closing) echo '</optgroup>';
-				}
-				echo '</select>';
-			break;
-		}
-		// Если есть описание поля, то вывести его
-		if (isset($desc) && $desc != '') echo "<br><span class='description'>$desc</span>";
-	}
-
-  /**
-   * Подключение стилей и скритов js
-   */
-  public static function enqueueScriptsAndStyles() :void
-  {
-    // CSS
-    wp_enqueue_style('wp_dg__admin-style', plugins_url('wp_dg/admin/css/wp_dg__admin-style.css'), [], null, 'all');
-    // JS
-    wp_enqueue_script('wp_dg__admin-script', plugins_url('wp_dg/admin/js/wp_dg__admin-script.js'), [], null, true);
+    return $group_fields;
   }
-
 
 }

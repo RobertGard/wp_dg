@@ -4,13 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit21146e177431037088d8a1654c21409e
+class ComposerStaticInit93afc7a9c9038b3dc079694cc8c2294b
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
         array (
             'WP_DG\\Includes\\' => 15,
-            'WP_DG\\Front\\' => 12,
             'WP_DG\\Admin\\' => 12,
         ),
         'D' => 
@@ -23,10 +22,6 @@ class ComposerStaticInit21146e177431037088d8a1654c21409e
         'WP_DG\\Includes\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',
-        ),
-        'WP_DG\\Front\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/front',
         ),
         'WP_DG\\Admin\\' => 
         array (
@@ -41,8 +36,8 @@ class ComposerStaticInit21146e177431037088d8a1654c21409e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit21146e177431037088d8a1654c21409e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit21146e177431037088d8a1654c21409e::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit93afc7a9c9038b3dc079694cc8c2294b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit93afc7a9c9038b3dc079694cc8c2294b::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

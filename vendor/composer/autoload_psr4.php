@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'WP_DG\\Includes\\' => array($baseDir . '/includes'),
-    'WP_DG\\Front\\' => array($baseDir . '/front'),
     'WP_DG\\Admin\\' => array($baseDir . '/admin'),
     'DiDom\\' => array($vendorDir . '/imangazaliev/didom/src/DiDom'),
 );

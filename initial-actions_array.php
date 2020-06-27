@@ -22,24 +22,10 @@ return [
 		'accepted_args' => 1
 	],
 	[
-		'hook'          => 'admin_menu',
+		'hook'          => 'widgets_init',
 		'component'     => 'WP_DG\Admin\WPDG_Admin',
 		'callback'      => 'addSettingsPage',
 		'priority'      => 10,
 		'accepted_args' => 1
-	],
-	[
-		'hook'          => 'admin_init',
-		'component'     => 'WP_DG\Admin\WPDG_Admin',
-		'callback'      => 'settingsPageContent',
-		'priority'      => 10,
-		'accepted_args' => 1
-	],
-  [
-    'hook'          => 'admin_init',
-    'component'     => 'WP_DG\Admin\WPDG_Admin',
-    'callback'      => 'enqueueScriptsAndStyles',
-    'priority'      => 10,
-    'accepted_args' => 1
-  ]
+	]
 ];

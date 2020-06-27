@@ -16,8 +16,7 @@
     "autoload": {
         "psr-4": {
             "WP_DG\\Includes\\": "includes",
-            "WP_DG\\Admin\\": "admin",
-            "WP_DG\\Front\\": "front"
+            "WP_DG\\Admin\\": "admin"
         }
     }
 }
