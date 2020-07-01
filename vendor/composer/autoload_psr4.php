@@ -8,5 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'WP_DG\\Includes\\' => array($baseDir . '/includes'),
     'WP_DG\\Admin\\' => array($baseDir . '/admin'),
+    'MakeitWorkPress\\WP_Custom_Fields\\' => array($vendorDir . '/makeitworkpress/wp-custom-fields/src'),
     'DiDom\\' => array($vendorDir . '/imangazaliev/didom/src/DiDom'),
 );

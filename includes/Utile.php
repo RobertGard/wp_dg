@@ -45,4 +45,40 @@ class Utile
 			$item = $option;
 		}
 	}
+
+	/**
+	 *  Получить все файлы и папки внутри переданной
+	 *
+	 * @param string $path
+	 * @param string $pattern
+	 * @param int $depth
+ 	 * @param string $flags
+	 *
+ 	 * @return array
+	 */
+	public static function bfglob($path, $pattern = '*', $depth = 1, $flags = GLOB_NOSORT) :array
+  {
+	  $matches = [];
+	  $folders = [rtrim($path, '/')];
+
+	  while ($folder = array_shift($folders)) {
+
+			if ($depth !== 1) { // Если первая вложенность, то не заходим сюда
+
+				if ($depth !== 0) { // Если нужно вывести все подходящие файлы, то сюда не зайдёт
+					$path_from_root_theme = str_replace($path, '', $folder);
+					$nesting_level = count(explode('/', $path_from_root_theme));
+					if ($nesting_level > $depth) break;
+				}
+
+				$moreFolders = glob($folder . '/*', GLOB_ONLYDIR);
+				$folders = array_merge($folders, $moreFolders);
+
+			}
+
+		    $matches = array_merge($matches, glob($folder . '/' . $pattern, $flags));
+
+    }
+	  return $matches;
+  }
 }

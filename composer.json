@@ -9,9 +9,16 @@
             "email": "info@de-gard.ru"
         }
     ],
+    "repositories": [              
+        {
+            "type": "vcs",
+            "url": "https://github.com/makeitworkpress/wp-custom-fields.git"
+        }
+    ],
     "minimum-stability": "dev",
     "require": {
-        "imangazaliev/didom": "dev-master"
+        "imangazaliev/didom": "dev-master",
+        "makeitworkpress/wp-custom-fields": "dev-master"
     },
     "autoload": {
         "psr-4": {

@@ -12,6 +12,10 @@ class ComposerStaticInit93afc7a9c9038b3dc079694cc8c2294b
             'WP_DG\\Includes\\' => 15,
             'WP_DG\\Admin\\' => 12,
         ),
+        'M' => 
+        array (
+            'MakeitWorkPress\\WP_Custom_Fields\\' => 33,
+        ),
         'D' => 
         array (
             'DiDom\\' => 6,
@@ -26,6 +30,10 @@ class ComposerStaticInit93afc7a9c9038b3dc079694cc8c2294b
         'WP_DG\\Admin\\' => 
         array (
             0 => __DIR__ . '/../..' . '/admin',
+        ),
+        'MakeitWorkPress\\WP_Custom_Fields\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/makeitworkpress/wp-custom-fields/src',
         ),
         'DiDom\\' => 
         array (

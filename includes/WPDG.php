@@ -34,11 +34,10 @@ class WPDG {
 	 */
 	protected function __construct()
 	{
-		$this->setSettings();
-
-		// Загрузите необходимые зависимости для этого плагина.
-		$this->loader = new WPDG_Loader($this->getSettings());
-		$this->setLocale();
+		$this->setSettings(); // Задаются общие настройки
+		$this->setLoader(); // Загрузите необходимые зависимости для этого плагина.
+		$this->setLocale(); // Задаётся локализацию
+		$this->createSettingsPage(); // Создаются страницы настроек в админке
 	}
 
 	protected function __clone() {}
@@ -86,17 +85,11 @@ class WPDG {
 	}
 
 	/**
-	 *  Тут задаётся режим
-	 *  Пока этот метод пуст и задаётся режим selection_regions,
-	 *  так как в панели админки нет переключателя плагина
-	 */
-	private function setRegime() :void
+	* Загрузите необходимые зависимости для этого плагина.
+	*/
+	private function setLoader() :void
 	{
-		$regime = $_GET['wpdg_regime'] ?? '';
-
-		if ($regime === 'selection_regions' || $regime === 'editing_regions') {
-			$this->currentRegime = $regime;
-		}
+		$this->loader = new WPDG_Loader($this->getSettings());
 	}
 
 	/**
@@ -112,6 +105,31 @@ class WPDG {
 		$plugin_i18n = new WPDG_i18n();
 
 		$this->loader->addAction( 'plugins_loaded', $plugin_i18n, 'loadPluginTextDomain' );
+	}
+
+	/**
+	*	Создание страницы настроек
+	*/
+	private function createSettingsPage() :void
+	{
+		if (is_admin()) {
+			$admin = new WPDG_Admin($this->getSettings());
+			$admin->launch();
+		}
+	}
+
+	/**
+	 *  Тут задаётся режим
+	 *  Пока этот метод пуст и задаётся режим selection_regions,
+	 *  так как в панели админки нет переключателя плагина
+	 */
+	private function setRegime() :void
+	{
+		$regime = $_GET['wpdg_regime'] ?? '';
+
+		if ($regime === 'selection_regions' || $regime === 'editing_regions') {
+			$this->currentRegime = $regime;
+		}
 	}
 
 	/**

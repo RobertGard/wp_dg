@@ -20,12 +20,5 @@ return [
 		'callback'      => 'acfAutoSync',
 		'priority'      => 10,
 		'accepted_args' => 1
-	],
-	[
-		'hook'          => 'widgets_init',
-		'component'     => 'WP_DG\Admin\WPDG_Admin',
-		'callback'      => 'addSettingsPage',
-		'priority'      => 10,
-		'accepted_args' => 1
 	]
 ];
