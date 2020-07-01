@@ -1,0 +1,41 @@
+// main: ../wp-custom-fields.less
+
+/* Select */
+.select2-container {
+    min-width: @grid-space * 6;
+    vertical-align: top;
+}
+
+.select2-container--default .select2-selection--single {
+    border: 1px solid @wp-btnborder;
+    border-radius: 4px;
+    color: @wp-field;
+}
+
+.select2-dropdown {
+    border: 1px solid @wp-btnborder;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid @wp-btnborder;    
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: @wp-blue;
+}
+
+.select2-container--default .select2-results__option .select2-results__option {
+    padding: 3px 8px;
+    img {
+        display: block;
+    }
+}
+
+.select2-container--default .select2-selection--multiple {
+    .select2-selection__choice {
+        padding-right: 12px;
+    }
+    .select2-selection__choice__remove {
+        padding: 2px 4px 5px 4px;    
+    }
+}
