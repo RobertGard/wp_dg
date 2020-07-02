@@ -1,6 +1,1 @@
-(function ($) {
-  'use strict';
-
-
-
-})(jQuery);
+console.log('123');

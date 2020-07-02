@@ -20,5 +20,12 @@ return [
 		'callback'      => 'acfAutoSync',
 		'priority'      => 10,
 		'accepted_args' => 1
+	],
+	[
+		'hook'          => 'admin_enqueue_scripts',
+		'component'     => 'WP_DG\Admin\WPDG_Admin',
+		'callback'      => 'enqueueScriptsAndStyles',
+		'priority'      => 10,
+		'accepted_args' => 1
 	]
 ];

@@ -51,7 +51,7 @@ class WPDG_Highlight {
 	 */
 	public function setEventsAndFiles() :void
 	{
-		$current_template = $GLOBALS['current_template'];
+		$current_template = $GLOBALS['current_template'] ?? '';
 
 		if (!empty($current_template)) {
 
@@ -123,7 +123,7 @@ class WPDG_Highlight {
     wp_enqueue_script( 'wp_dg__wrapper-picker', plugins_url('wp_dg/assets/js/dg-lib/index.js'), ['wp_dg__picker'], $this->settings['version'], true);
 
     // CSS
-    wp_enqueue_style('wp_dg__picker-css', plugins_url('wp_dg/assets/js/dg-lib/dg.css'), [], $this->settings['version']);
+    wp_enqueue_style('wp_dg__picker-style', plugins_url('wp_dg/assets/js/dg-lib/dg.css'), [], $this->settings['version']);
 	}
 
 	/**

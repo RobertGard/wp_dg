@@ -81,4 +81,21 @@ class Utile
     }
 	  return $matches;
   }
+
+	/**
+	 * Определяет константу, если она еще не существует.
+	 *
+	 * @date	25/4/20
+	 * @since	1.1.0
+	 *
+	 * @param	string $name The constant name.
+	 * @param	mixed $value The constant value.
+	 * @return	void
+	 */
+	public static function define( $name, $value = true ) :void
+	{
+		if( !defined($name) ) {
+			define( $name, $value );
+		}
+	}
 }

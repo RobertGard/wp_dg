@@ -21,7 +21,8 @@ class WPDG_Admin
 	 *
 	 * @since    1.1.0
 	 */
-	public function __construct($settings) {
+	public function __construct($settings)
+  {
     $this->opt_name = 'wp_dg_option';
     $this->settings = $settings;
   }
@@ -36,28 +37,34 @@ class WPDG_Admin
     $args = [
         'class'         => 'tabs-left',
         'id'            => $this->opt_name,
-        'title'         => __('Настройки WP DG', 'wp-custom-fields'),
+        'title'         => __('Настройки WP DG', 'wp_dg'),
         'capability'    => 'manage_options',
-        'menu_title'    => __('Настройки WP DG', 'wp-custom-fields'),
+        'menu_title'    => __('Настройки WP DG', 'wp_dg'),
         'menu_icon'     => 'dashicons-admin-generic',
         'menu_position' => 99,
-        'sections'      => [ $this->setSectionMainSettings() ]
+        'sections'      => [ $this->getSectionMainSettings() ]
     ];
 
     $fields->add('options', $args);
 	}
 
-  private function setSectionMainSettings()
+  /**
+  * Секция главных настроек
+  */
+  private function getSectionMainSettings() :array
   {
     return [
-        'id'        => 'second_section',
-        'title'     => __('Section Two', 'wp-custom-fields'),
+        'id'        => 'section_main_settings',
+        'title'     => __('Главные настройки', 'wp_dg'),
         'icon'      => 'camera_enhance',
-        'fields'    => $this->getFields(),
+        'fields'    => $this->getMainSettingsFields(),
     ];
   }
 
-  private function getFields()
+  /**
+  * Поля секции главных настроек
+  */
+  private function getMainSettingsFields() :array
   {
     $group_fields = [];
 
@@ -121,11 +128,11 @@ class WPDG_Admin
                 ],
                 [
                   'id'            => 'location_rule_operator',
-                  'title'         => '',
+                  'title'         => 'Оператор',
                   'type'          => 'select',
                   'options'       => [
                     '=='          => __('равно', 'wp_dg'),
-                      '!='        => __('не равно', 'wp_dg'),
+                    '!='          => __('не равно', 'wp_dg'),
                   ]
                 ],
                 [
@@ -142,5 +149,16 @@ class WPDG_Admin
     return $group_fields;
   }
 
+  /**
+	 * Подключение стилей и скритов js
+	 */
+	public static function enqueueScriptsAndStyles() :void
+	{
+    // JS
+    wp_enqueue_script( 'wp_dg__admin-script', plugins_url('wp_dg/admin/js/wp_dg__admin-script.js'), [], '1.1.0', true);
+
+    // CSS
+    wp_enqueue_style('wp_dg__admin-style', plugins_url('wp_dg/admin/css/wp_dg__admin-style.css'), [], '1.1.0');
+	}
 
 }

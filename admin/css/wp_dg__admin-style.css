@@ -2,3 +2,31 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+ .wpcf-field{
+   padding: 5px 0px;
+ }
+ .wpcf-field-title{
+    border-bottom: 0px;
+ }
+ .wpcf-field-input, .wpcf-field-description p, .wpcf-field.field-select{
+    margin: 0px;
+ }
+ .wpcf-field.field-heading{
+    background-color: #f3f5f6;
+    padding-left: 20px;
+ }
+ .wpcf-repeatable-fields{
+    padding: 10px 20px;
+ }
+ .wpcf-fields > .field-input{
+   width: 50%;
+ }
+ .wpcf-repeatable-fields > .wpcf-field:not(.field-repeatable){
+   width: 30%;
+ }
+
+ .wpcf-repeatable-fields > .wpcf-field:first-child:not(.field-repeatable),
+ .wpcf-repeatable-fields > .wpcf-field:last-child:not(.field-repeatable){
+   width: 35%;
+ }

@@ -67,9 +67,9 @@ class WPDG {
 	private function setSettings() :void
 	{
 		// Define constants.
-		$this->define( 'WP_DG_PATH', dirname(plugin_dir_path( __FILE__ )));
-		$this->define( 'WP_DG_SLUG', basename(WP_DG_PATH) );
-		$this->define( 'WP_DG_VERSION', '1.1.0' );
+		Utile::define( 'WP_DG_PATH', dirname(plugin_dir_path( __FILE__ )));
+		Utile::define( 'WP_DG_SLUG', basename(WP_DG_PATH) );
+		Utile::define( 'WP_DG_VERSION', '1.1.0' );
 
 		// Define settings.
 		$this->settings = array(
@@ -104,7 +104,7 @@ class WPDG {
 	{
 		$plugin_i18n = new WPDG_i18n();
 
-		$this->loader->addAction( 'plugins_loaded', $plugin_i18n, 'loadPluginTextDomain' );
+		$this->getLoader()->addAction('plugins_loaded', $plugin_i18n, 'loadPluginTextDomain');
 	}
 
 	/**
@@ -145,13 +145,13 @@ class WPDG {
 
 			$highlight = new WPDG_Highlight( $this->getSettings() );
 			$highlight->setRegions();
-			$this->loader->addAction( 'wp_footer', $highlight, 'enqueueScriptsAndStyles' )
-			->addAction( 'script_loader_tag', $highlight, 'addModuleTypeForJS', 10, 3 )
-			->addAction( 'wp_footer', $highlight, 'addContextMenuAndPopUp' );
+			$this->getLoader()->addAction('wp_footer', $highlight, 'enqueueScriptsAndStyles')
+			->addAction('script_loader_tag', $highlight, 'addModuleTypeForJS', 10, 3)
+			->addAction('wp_footer', $highlight, 'addContextMenuAndPopUp');
 
 		}
 
-		$this->loader->run();
+		$this->getLoader()->run();
 	}
 
 	/**
@@ -174,23 +174,6 @@ class WPDG {
 	public function getSettings() :array
 	{
 		return $this->settings;
-	}
-
-	/**
-	 * Определяет константу, если она еще не существует.
-	 *
-	 * @date	25/4/20
-	 * @since	1.1.0
-	 *
-	 * @param	string $name The constant name.
-	 * @param	mixed $value The constant value.
-	 * @return	void
-	 */
-	function define( $name, $value = true ) :void
-	{
-		if( !defined($name) ) {
-			define( $name, $value );
-		}
 	}
 
 	/**
