@@ -77,76 +77,84 @@ class WPDG_Admin
 			$file = str_replace(get_stylesheet_directory(), '', $file_path);
 			$file_name = Utile::prepareFileName($file);
 
-      $group_fields = array_merge($group_fields, [
-        [
-          'id'              => $file_name . '_heading',
-          'type'            => 'heading',
-          'title'           => __($file , 'wp_dg')
-        ],
-        [
-          'id'              => $file_name . '_opening_event',
-          'type'            => 'input',
-          'title'           => esc_html__('Открывающее событие', 'wp_dg'),
-          'description'     => esc_html__('Введите открывающее событие.', 'wp_dg'),
-        ],
-        [
-          'id'              => $file_name . '_closing_event',
-          'type'            => 'input',
-          'title'           => esc_html__('Закрывающее событие', 'wp_dg'),
-          'description'     => esc_html__('Введите закрывающее событие.', 'wp_dg'),
-        ],
-        [
-          'id'              => $file_name . '_header_file',
-          'type'            => 'input',
-          'title'           => esc_html__('Файл шапки для этого шаблона', 'wp_dg'),
-          'description'     => esc_html__('Введите путь до файла шапки от корня темы.', 'wp_dg'),
-        ],
-        [
-          'id'              => $file_name . '_footer_file',
-          'type'            => 'input',
-          'title'           => esc_html__('Файл футера для этого шаблона', 'wp_dg'),
-          'description'     => esc_html__('Введите путь до файла футера от корня темы.', 'wp_dg'),
-        ],
-        [
-          'id'            => $file_name . '_field_repeatable',
-          'title'         => __('Условие отображения', 'wp_dg'),
-          'type'          => 'repeatable',
-          'fields'        => [
-                [
-                  'id'            => 'location_rule_param',
-                  'title'         => __('Отображать группу полей, если', 'wp_dg'),
-                  'type'          => 'select',
-                  'description'   => esc_html__('Выберите при каких условия будут отображаться ваши поля.', 'wp_dg'),
-                  'options'       => [
-                      'post_type'         => __('Тип записи', 'wp_dg'),
-                      'post_template'     => __('Шаблон записи', 'wp_dg'),
-                      'post'              => __('Запись', 'wp_dg'),
-                      'page_type'         => __('Тип страницы', 'wp_dg'),
-                      'page_template'     => __('Шаблон страницы', 'wp_dg'),
-                      'page'              => __('Страница', 'wp_dg'),
-                  ]
-                ],
-                [
-                  'id'            => 'location_rule_operator',
-                  'title'         => 'Оператор',
-                  'type'          => 'select',
-                  'options'       => [
-                    '=='          => __('равно', 'wp_dg'),
-                    '!='          => __('не равно', 'wp_dg'),
-                  ]
-                ],
-                [
-                  'id'            => 'location_rule_value',
-                  'title'         => __('Значение', 'wp_dg'),
-                  'type'          => 'input',
-                  'subtype'       => 'url'
-                ],
-          ]
-        ]
-      ]);
+      $group_fields = array_merge($group_fields, self::getSettingsFieldsCurrentFile($file_name, $file));
 		}
 
     return $group_fields;
+  }
+
+  /**
+  * Возвращаем шаблон полей для раздела главныз настроек
+  */
+  private static function getSettingsFieldsCurrentFile(string $file_name, string $file) :array
+  {
+    return [
+      [
+        'id'              => $file_name . '_heading',
+        'type'            => 'heading',
+        'title'           => __($file , 'wp_dg')
+      ],
+      [
+        'id'              => $file_name . '_opening_event',
+        'type'            => 'input',
+        'title'           => esc_html__('Открывающее событие', 'wp_dg'),
+        'description'     => esc_html__('Введите открывающее событие.', 'wp_dg'),
+      ],
+      [
+        'id'              => $file_name . '_closing_event',
+        'type'            => 'input',
+        'title'           => esc_html__('Закрывающее событие', 'wp_dg'),
+        'description'     => esc_html__('Введите закрывающее событие.', 'wp_dg'),
+      ],
+      [
+        'id'              => $file_name . '_header_file',
+        'type'            => 'input',
+        'title'           => esc_html__('Файл шапки для этого шаблона', 'wp_dg'),
+        'description'     => esc_html__('Введите путь до файла шапки от корня темы.', 'wp_dg'),
+      ],
+      [
+        'id'              => $file_name . '_footer_file',
+        'type'            => 'input',
+        'title'           => esc_html__('Файл футера для этого шаблона', 'wp_dg'),
+        'description'     => esc_html__('Введите путь до файла футера от корня темы.', 'wp_dg'),
+      ],
+      [
+        'id'            => $file_name . '_field_repeatable',
+        'title'         => __('Условие отображения', 'wp_dg'),
+        'type'          => 'repeatable',
+        'fields'        => [
+              [
+                'id'            => 'location_rule_param',
+                'title'         => __('Отображать группу полей, если', 'wp_dg'),
+                'type'          => 'select',
+                'description'   => esc_html__('Выберите при каких условия будут отображаться ваши поля.', 'wp_dg'),
+                'options'       => [
+                    'post_type'         => __('Тип записи', 'wp_dg'),
+                    'post_template'     => __('Шаблон записи', 'wp_dg'),
+                    'post'              => __('Запись', 'wp_dg'),
+                    'page_type'         => __('Тип страницы', 'wp_dg'),
+                    'page_template'     => __('Шаблон страницы', 'wp_dg'),
+                    'page'              => __('Страница', 'wp_dg'),
+                ]
+              ],
+              [
+                'id'            => 'location_rule_operator',
+                'title'         => 'Оператор',
+                'type'          => 'select',
+                'options'       => [
+                  '=='          => __('равно', 'wp_dg'),
+                  '!='          => __('не равно', 'wp_dg'),
+                ]
+              ],
+              [
+                'id'            => 'location_rule_value',
+                'title'         => __('Значение', 'wp_dg'),
+                'type'          => 'input',
+                'subtype'       => 'url'
+              ],
+        ]
+      ]
+    ];
   }
 
   /**

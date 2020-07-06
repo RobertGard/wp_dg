@@ -57,35 +57,31 @@ class WPDG_Highlight {
 
 			// Задаём дефолный массив events_and_files
 			$this->events_and_files = self::getDefaultArrayEventsAndFiles();
+			$main_option = get_option('wp_dg_option');
 
 			foreach ($this->events_and_files as $file_key => &$file_data) {
 
 				// Получаем и задаём path файлов
 				if (isset($file_data['path'])) {
 
-					Utile::getOptionAndOverrideItem(
-						$current_template,
-						$file_key . '_file',
-						$file_data['path']
-					);
+					$file_path = ($main_option[
+						Utile::prepareFileName($current_template) . '_' . $file_key . '_file'
+					]) ?? '';
+					if(!empty($file_path)) $file_data['path'] = $file_path;
 
 				} else {
 					$file_data['path'] = $current_template;
 				}
 
+				$file_name = Utile::prepareFileName($file_data['path']);
+
 				// Задаём открывающее событие
-				Utile::getOptionAndOverrideItem(
-					$file_data['path'],
-					'opening_event',
-					$file_data['opening_event']
-				);
+				$opening_event = ($main_option[$file_name . '_opening_event']) ?? '';
+				if(!empty($opening_event)) $file_data['opening_event'] = $file_path;
 
 				// Задаём закрывающее событие
-				Utile::getOptionAndOverrideItem(
-					$file_data['path'],
-					'closing_event',
-					$file_data['closing_event']
-				);
+				$closing_event = ($main_option[$file_name . '_closing_event']) ?? '';
+				if(!empty($closing_event)) $file_data['closing_event'] = $file_path;
 
 			}
 		}
